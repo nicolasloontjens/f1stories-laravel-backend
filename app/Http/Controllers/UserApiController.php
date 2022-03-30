@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Modules\Users\Services\UserService;
+use Illuminate\Support\Facades\Response;
 
 class UserApiController extends Controller
 {
@@ -16,10 +17,11 @@ class UserApiController extends Controller
     public function register(Request $request){
         $data = $request->only(['username','password']);
         $res = $this->service->register($data);
-        return $res;
+        return Response::json(['token'=>$res],201);
     }
 
     public function login(Request $request){
-
+        $data = $request->only(['username','password']);
+        $res = $this->service->login($data);
     }
 }
