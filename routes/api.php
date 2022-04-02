@@ -23,3 +23,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get("/stories",[StoryApiController::class,"all"]);
 Route::post("/register",[UserApiController::class,"register"]);
+Route::post("/login",[UserApiController::class,'login']);

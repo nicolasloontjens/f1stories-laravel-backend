@@ -17,11 +17,12 @@ class UserApiController extends Controller
     public function register(Request $request){
         $data = $request->only(['username','password']);
         $res = $this->service->register($data);
-        return Response::json(['token'=>$res],201);
+        return $res;
     }
 
     public function login(Request $request){
         $data = $request->only(['username','password']);
         $res = $this->service->login($data);
+        return $res;
     }
 }

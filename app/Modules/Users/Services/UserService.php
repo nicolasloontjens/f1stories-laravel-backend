@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use App\Modules\Users\Services\JWT;
+use Illuminate\Support\Facades\Hash;
 use stdClass;
 
 class UserService extends Service{
@@ -23,7 +24,7 @@ class UserService extends Service{
 
     public function register($user){
         if(User::where('username',$user['username'])->first() != null){
-            return Response::json(['Error'=>'Username is taken'],404);
+            return Response::json(['Error'=>'Username is taken'],401);
         }
 
         $validator = Validator::make($user,$this->rules);
@@ -38,22 +39,34 @@ class UserService extends Service{
         $newuser->userscore = 0;
 
         $newuser->save();
-
-        $jwtuser = new stdClass();
-        $jwtuser->id = $newuser->id;
-        $jwtuser->username = $user['username'];
-        $jwtuser->password = $user['password'];
-
-        $token = JWT::encode($jwtuser,"verysecurekey");
-
+        $token = $this->generateToken($newuser);
         $newuser->token = $token;
         $newuser->save();
 
-        return $token;
+        return Response::json(['token'=>$token],201);
     }
 
     public function login($user){
-        
+        $validator = Validator::make($user,$this->rules);
+        if($validator->fails()){
+            return;
+        }
+        $actualuser = User::where('username',$user['username'])->first();
+        if(Hash::check($user['password'],$actualuser['password'])){
+            $token = $this->generateToken($actualuser);
+            $actualuser->token = $token;
+            $actualuser->save();
+            return Response::json(['token'=>$token],202);
+        }
+        return Response::json(['Error'=>'Wrong credentials'],401);
+    }
+
+    private function generateToken($user){
+        $jwtuser = new stdClass();
+        $jwtuser->id = $user->id;
+        $jwtuser->username = $user['username'];
+        $jwtuser->password = $user['password'];
+        return JWT::encode($jwtuser,'verysecuresecret');
     }
 
 }

@@ -7,6 +7,8 @@
  * http://self-issued.info/docs/draft-jones-json-web-token-01.html.
  *
  * @author Neuman Vong <neuman@twilio.com>
+ *
+ * https://github.com/luciferous/jwt/blob/master/JWT.php
  */
 namespace App\Modules\Users\Services;
 
