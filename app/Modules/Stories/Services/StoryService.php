@@ -4,6 +4,7 @@ namespace App\Modules\Stories\Services;
 
 use App\Modules\Core\Services\Service;
 use App\Modules\Stories\Models\Story;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use stdClass;
 
@@ -32,7 +33,7 @@ class StoryService extends Service{
     public function add($uid, $story){
         $validator = Validator::make($story,$this->rules);
         if($validator->fails()){
-            return;
+            return Response::json(['Error'=>'Bad Request'],400);
         }
         $newstory = new Story;
         $newstory->title = $story['title'];
@@ -43,6 +44,21 @@ class StoryService extends Service{
         $newstory->user_id = $uid;
         $newstory->save();
         return $this->convertToRightFormat(($newstory));
+    }
+
+    public function update($uid, $storyid, $story){
+        $validator = Validator::make($story,["title" => "required|string", "content" => "required|string"]);
+        if($validator->fails()){
+            return Response::json(['Error'=>'Bad Request'],400);
+        }
+        $storytoupdate = Story::find($storyid);
+        if($storytoupdate == null && $storytoupdate['user_id'] != $uid){
+            return Response::json(['Error'=>'You are not the owner of this post'],401);
+        }
+        $storytoupdate->title = $story['title'];
+        $storytoupdate->content = $story['content'];
+        $storytoupdate->save();
+        return $this->convertToRightFormat($storytoupdate);
     }
 
     public function convertToRightFormat($story){

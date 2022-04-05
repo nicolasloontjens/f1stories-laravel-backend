@@ -6,7 +6,7 @@ use App\Modules\Stories\Services\StoryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use App\Modules\Users\Services\JWT;
-
+use stdClass;
 
 class StoryApiController extends Controller
 {
@@ -29,7 +29,11 @@ class StoryApiController extends Controller
     }
 
     public function update($id, Request $request){
-
+        if(!$request->hasHeader('Authorization')){
+            return Response::json(['Error'=>'No token found'],401);
+        }
+        $uid = JWT::decode($request->header('Authorization'),'verysecuresecret');
+        return $this->service->update($uid,$id,$request->all());
     }
 
     public function delete($id){

@@ -29,7 +29,7 @@ class UserService extends Service{
 
         $validator = Validator::make($user,$this->rules);
         if($validator->fails()){
-            return;
+            return Response::json(['Error'=>'Bad Request'],400);
         }
 
         $newuser = new User;
@@ -49,7 +49,7 @@ class UserService extends Service{
     public function login($user){
         $validator = Validator::make($user,$this->rules);
         if($validator->fails()){
-            return;
+            return Response::json(['Error'=>'Bad Request'],400);
         }
         $actualuser = User::where('username',$user['username'])->first();
         if(Hash::check($user['password'],$actualuser['password'])){
