@@ -53,7 +53,7 @@ class StoryService extends Service{
         }
         $storytoupdate = Story::find($storyid);
         if($storytoupdate == null){
-            return Response::json(['Error'=>'Post does not exist'],400);
+            return Response::json(['Error'=>'Story does not exist'],400);
         }
         if($storytoupdate['user_id'] != $uid){
             return Response::json(['Error'=>'You are not the owner of this post'],401);

@@ -34,9 +34,9 @@ class CommentService extends Service{
         if($validator->fails()){
             return Response::json(['Error'=>'Bad Request'],400);
         }
-        $storytoupdate = Story::find($storyid);
-        if($storytoupdate == null){
-            return Response::json(['Error'=>'Post does not exist'],400);
+        $story = Story::find($storyid);
+        if($story == null){
+            return Response::json(['Error'=>'Story does not exist'],400);
         }
         $c = new Comment;
         $c->user_id = $uid;
@@ -44,6 +44,23 @@ class CommentService extends Service{
         $c->content = $comment['content'];
         $c->save();
         return $this->convertToRightFormat(Comment::with('user')->where('id',$c->id)->first());
+    }
+
+    public function update($commentid, $uid,$comment){
+        $validator = Validator::make($comment,$this->rules);
+        if($validator->fails()){
+            return Response::json(['Error'=>'Bad Request'],400);
+        }
+        $commenttoupdate = Comment::find($commentid);
+        if($commenttoupdate == null){
+            return Response::json(['Error'=>'Comment does not exist'],400);
+        }
+        if($commenttoupdate->user_id != $uid){
+            return Response::json(['Error'=>'You are not the owner of this comment'],401);
+        }
+        $commenttoupdate->content = $comment['content'];
+        $commenttoupdate->save();
+        return $this->convertToRightFormat(Comment::with('user')->where('id',$commentid)->first());
     }
 
     public function convertToRightFormat($comment){
@@ -55,4 +72,6 @@ class CommentService extends Service{
         $c->username = $comment['user']['username'];
         return $c;
     }
+
+
 }
