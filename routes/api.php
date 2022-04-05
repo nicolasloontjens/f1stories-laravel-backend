@@ -21,6 +21,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
+
+Route::post("/users/register",[UserApiController::class,"register"]);
+Route::post("/users/login",[UserApiController::class,'login']);
+
+
 Route::get("/stories",[StoryApiController::class,"all"]);
-Route::post("/register",[UserApiController::class,"register"]);
-Route::post("/login",[UserApiController::class,'login']);
+Route::post("/stories",[StoryApiController::class,"add"]);
+Route::put("/stories/{id}",[StoryApiController::class,"update"]);
+Route::delete("/stories/{id}",[StoryApiController::class,"delete"]);
+
+//Route::get("/stories/$id/comments",[Comments])
+

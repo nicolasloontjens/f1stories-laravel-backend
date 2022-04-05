@@ -63,7 +63,7 @@ class UserService extends Service{
 
     private function generateToken($user){
         $jwtuser = new stdClass();
-        $jwtuser->id = $user->id;
+        $jwtuser->uid = $user->id;
         $jwtuser->username = $user['username'];
         $jwtuser->password = $user['password'];
         return JWT::encode($jwtuser,'verysecuresecret');
