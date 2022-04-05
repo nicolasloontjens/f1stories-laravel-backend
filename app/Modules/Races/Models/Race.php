@@ -2,6 +2,7 @@
 
 namespace App\Modules\Races\Models;
 
+use App\Modules\Users\Models\UserRaces;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

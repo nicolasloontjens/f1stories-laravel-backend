@@ -19,7 +19,7 @@ class CommentService extends Service{
     }
 
     public function all($storyid){
-        return Story::find($storyid)->user();
+        return Story::find($storyid)->user()->get();
 
         return $this->model->where('story_id',$storyid);
     }

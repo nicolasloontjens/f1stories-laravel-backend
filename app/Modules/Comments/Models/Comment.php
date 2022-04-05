@@ -2,6 +2,8 @@
 
 namespace App\Modules\Comments\Models;
 
+use App\Models\User;
+use App\Modules\Stories\Models\Story;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

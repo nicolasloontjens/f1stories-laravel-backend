@@ -2,6 +2,10 @@
 
 namespace App\Modules\Stories\Models;
 
+use App\Models\User;
+use App\Modules\Comments\Models\Comment;
+use App\Modules\Races\Models\Race;
+use App\Modules\Users\Models\UserInteracts;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
