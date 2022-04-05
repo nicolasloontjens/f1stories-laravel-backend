@@ -36,7 +36,11 @@ class StoryApiController extends Controller
         return $this->service->update($uid,$id,$request->all());
     }
 
-    public function delete($id){
-
+    public function delete($id, Request $request){
+        if(!$request->hasHeader('Authorization')){
+            return Response::json(['Error'=>'No token found'],401);
+        }
+        $uid = JWT::decode($request->header('Authorization'),'verysecuresecret');
+        return $this->service->delete($id, $uid);
     }
 }

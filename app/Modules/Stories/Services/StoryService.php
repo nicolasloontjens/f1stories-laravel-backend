@@ -52,13 +52,27 @@ class StoryService extends Service{
             return Response::json(['Error'=>'Bad Request'],400);
         }
         $storytoupdate = Story::find($storyid);
-        if($storytoupdate == null && $storytoupdate['user_id'] != $uid){
+        if($storytoupdate == null){
+            return Response::json(['Error'=>'Post does not exist'],400);
+        }
+        if($storytoupdate['user_id'] != $uid){
             return Response::json(['Error'=>'You are not the owner of this post'],401);
         }
         $storytoupdate->title = $story['title'];
         $storytoupdate->content = $story['content'];
         $storytoupdate->save();
         return $this->convertToRightFormat($storytoupdate);
+    }
+
+    public function delete($storyid, $uid){
+        $storytodelete = Story::find($storyid);
+        if($storytodelete == null){
+            return Response::json(['Error'=>'Post does not exist'],400);
+        }
+        if($storytodelete['user_id'] != $uid){
+            return Response::json(['Error'=>'You are not the owner of this post'],401);
+        }
+        return $storytodelete->delete();
     }
 
     public function convertToRightFormat($story){
