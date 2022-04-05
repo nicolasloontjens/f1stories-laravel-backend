@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentApiController;
 use App\Http\Controllers\StoryApiController;
 use App\Http\Controllers\UserApiController;
 use Illuminate\Http\Request;
@@ -31,5 +32,5 @@ Route::post("/stories",[StoryApiController::class,"add"]);
 Route::put("/stories/{id}",[StoryApiController::class,"update"]);
 Route::delete("/stories/{id}",[StoryApiController::class,"delete"]);
 
-//Route::get("/stories/$id/comments",[Comments])
+Route::get("/stories/{id}/comments",[CommentApiController::class,"all"]);
 
