@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Modules\Users\Services\JWT;
 use Illuminate\Http\Request;
 use App\Modules\Users\Services\UserService;
-use Illuminate\Support\Facades\Response;
+use Response;
 
 class UserApiController extends Controller
 {
@@ -28,6 +29,15 @@ class UserApiController extends Controller
 
     public function getUser($id){
         $res = $this->service->getUser($id);
+        return $res;
+    }
+
+    public function addRace($id, Request $request){
+        if(!$request->hasHeader('Authorization')){
+            return Response::json(['Error'=>'No token found'],401);
+        }
+        $uid = JWT::decode($request->header('Authorization'),'verysecuresecret');
+        $res = $this->service->addRace($id, $uid->uid, $request->all());
         return $res;
     }
 }

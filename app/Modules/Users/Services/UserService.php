@@ -4,6 +4,7 @@ namespace App\Modules\Users\Services;
 
 use App\Modules\Core\Services\Service;
 use App\Models\User;
+use App\Modules\Races\Models\Race;
 use App\Modules\Stories\Models\Story;
 use App\Modules\Users\Models\UserRaces;
 use Illuminate\Support\Facades\Auth;
@@ -77,6 +78,21 @@ class UserService extends Service{
         $user->racesvisited = $totalraces->count();
         $user->userscore = $score;
         return $user;
+    }
+
+    public function addRace($id, $uid, $body){
+        $user = $this->model::find($id);
+        if($user == null) return Response::json(['Error'=>'User does not exist'],400);
+        if($user['id'] != $uid) return Response::json(['Error'=>'You are not this user'],401);
+        $race = Race::where("title",$body['race'])->first();
+        if($race === null){
+            return Response::json(['Error'=>'Race does not exist'],401);
+        }
+        $userrace = new UserRaces;
+        $userrace->user_id = $uid;
+        $userrace->race_id = $race->id;
+        $userrace->save();
+        return Response::json(['message'=>'added race'],202);
     }
 
     private function generateToken($user){
