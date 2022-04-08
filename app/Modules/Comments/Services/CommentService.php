@@ -63,6 +63,18 @@ class CommentService extends Service{
         return $this->convertToRightFormat(Comment::with('user')->where('id',$commentid)->first());
     }
 
+    public function delete($id, $uid){
+        $comment = Comment::find($id);
+        if($comment == null){
+            return Response::json(['Error'=>'Comment does not exist'],400);
+        }
+        if($comment->user_id != $uid){
+            return Response::json(['Error'=>'You are not the owner of this comment'],401);
+        }
+        $comment->delete();
+        return Response::json(['message'=>'Comment deleted!'],200);
+    }
+
     public function convertToRightFormat($comment){
         $c = new stdClass;
         $c->commentid = $comment['id'];

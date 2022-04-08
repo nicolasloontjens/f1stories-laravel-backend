@@ -35,4 +35,5 @@ Route::delete("/stories/{id}",[StoryApiController::class,"delete"]);
 Route::get("/stories/{id}/comments",[CommentApiController::class,"all"]);
 Route::post("/stories/{id}/comments",[CommentApiController::class,"post"]);
 Route::put("/comments/{id}",[CommentApiController::class,"update"]);
+Route::delete("/comments/{id}",[CommentApiController::class,"delete"]);
 

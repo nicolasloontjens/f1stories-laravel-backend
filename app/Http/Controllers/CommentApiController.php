@@ -34,4 +34,12 @@ class CommentApiController extends Controller
         $uid = JWT::decode($request->header('Authorization'),'verysecuresecret');
         return $this->service->update($id, $uid->uid, $request->all());
     }
+
+    public function delete($id, Request $request){
+        if(!$request->hasHeader('Authorization')){
+            return Response::json(['Error'=>'No token found'],401);
+        }
+        $uid = JWT::decode($request->header('Authorization'),'verysecuresecret');
+        return $this->service->delete($id, $uid->uid);
+    }
 }
