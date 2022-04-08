@@ -21,7 +21,7 @@ class CommentService extends Service{
     }
 
     public function all($storyid){
-        $comments = Comment::with('user')->where('story_id',$storyid)->get();
+        $comments = $this->model::with('user')->where('story_id',$storyid)->get();
         $res = [];
         foreach($comments as $comment){
             $res[] = $this->convertToRightFormat($comment);
@@ -43,7 +43,7 @@ class CommentService extends Service{
         $c->story_id = $storyid;
         $c->content = $comment['content'];
         $c->save();
-        return $this->convertToRightFormat(Comment::with('user')->where('id',$c->id)->first());
+        return $this->convertToRightFormat($this->model::with('user')->where('id',$c->id)->first());
     }
 
     public function update($commentid, $uid,$comment){
@@ -51,7 +51,7 @@ class CommentService extends Service{
         if($validator->fails()){
             return Response::json(['Error'=>'Bad Request'],400);
         }
-        $commenttoupdate = Comment::find($commentid);
+        $commenttoupdate = $this->model::find($commentid);
         if($commenttoupdate == null){
             return Response::json(['Error'=>'Comment does not exist'],400);
         }
@@ -60,11 +60,11 @@ class CommentService extends Service{
         }
         $commenttoupdate->content = $comment['content'];
         $commenttoupdate->save();
-        return $this->convertToRightFormat(Comment::with('user')->where('id',$commentid)->first());
+        return $this->convertToRightFormat($this->model::with('user')->where('id',$commentid)->first());
     }
 
     public function delete($id, $uid){
-        $comment = Comment::find($id);
+        $comment = $this->model::find($id);
         if($comment == null){
             return Response::json(['Error'=>'Comment does not exist'],400);
         }

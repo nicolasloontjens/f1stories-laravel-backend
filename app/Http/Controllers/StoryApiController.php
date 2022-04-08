@@ -33,7 +33,7 @@ class StoryApiController extends Controller
             return Response::json(['Error'=>'No token found'],401);
         }
         $uid = JWT::decode($request->header('Authorization'),'verysecuresecret');
-        return $this->service->update($uid,$id,$request->all());
+        return $this->service->update($uid->uid,$id,$request->all());
     }
 
     public function delete($id, Request $request){
@@ -41,6 +41,14 @@ class StoryApiController extends Controller
             return Response::json(['Error'=>'No token found'],401);
         }
         $uid = JWT::decode($request->header('Authorization'),'verysecuresecret');
-        return $this->service->delete($id, $uid);
+        return $this->service->delete($id, $uid->uid);
+    }
+
+    public function interact($id, Request $request){
+        if(!$request->hasHeader('Authorization')){
+            return Response::json(['Error'=>'No token found'],401);
+        }
+        $uid = JWT::decode($request->header('Authorization'),'verysecuresecret');
+        return $this->service->interact($id, $uid->uid, $request->all());
     }
 }

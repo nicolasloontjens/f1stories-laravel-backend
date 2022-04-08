@@ -31,6 +31,8 @@ Route::get("/stories",[StoryApiController::class,"all"]);
 Route::post("/stories",[StoryApiController::class,"add"]);
 Route::put("/stories/{id}",[StoryApiController::class,"update"]);
 Route::delete("/stories/{id}",[StoryApiController::class,"delete"]);
+Route::post("/stories/{id}/interact",[StoryApiController::class,"interact"]);
+
 
 Route::get("/stories/{id}/comments",[CommentApiController::class,"all"]);
 Route::post("/stories/{id}/comments",[CommentApiController::class,"post"]);
