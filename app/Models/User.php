@@ -23,6 +23,9 @@ class User extends Model
      */
     protected $hidden = [
         'password',
+        'token',
+        'created_at',
+        'updated_at'
     ];
 
     /**

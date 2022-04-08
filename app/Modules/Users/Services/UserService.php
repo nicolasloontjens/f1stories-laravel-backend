@@ -4,6 +4,8 @@ namespace App\Modules\Users\Services;
 
 use App\Modules\Core\Services\Service;
 use App\Models\User;
+use App\Modules\Stories\Models\Story;
+use App\Modules\Users\Models\UserRaces;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
@@ -61,12 +63,41 @@ class UserService extends Service{
         return Response::json(['Error'=>'Wrong credentials'],401);
     }
 
+    public function getUser($id){
+        $user = $this->model::find($id);
+
+        $totalraces = UserRaces::where("user_id",$id)->get();
+        $stories = Story::where("user_id",$id)->get();
+        $score = $stories->sum("score");
+        $formattedstories = [];
+        foreach($stories as $story){
+            $formattedstories[] = $this->convertToRightFormat($story);
+        }
+        $user->stories = $formattedstories;
+        $user->racesvisited = $totalraces->count();
+        $user->userscore = $score;
+        return $user;
+    }
+
     private function generateToken($user){
         $jwtuser = new stdClass();
         $jwtuser->uid = $user->id;
         $jwtuser->username = $user['username'];
         $jwtuser->password = $user['password'];
         return JWT::encode($jwtuser,'verysecuresecret');
+    }
+
+    private function convertToRightFormat($story){
+        $s = new stdClass;
+        $s->storyid = $story['id'];
+        $s->title = $story['title'];
+        $s->content = $story['content'];
+        $s->country = $story['country'];
+        $s->raceid = $story['race_id'];
+        $s->userid = $story['user_id'];
+        $s->score = $story['score'];
+        $s->date = $story['created_at'];
+        return $s;
     }
 
 }

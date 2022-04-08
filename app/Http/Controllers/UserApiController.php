@@ -25,4 +25,9 @@ class UserApiController extends Controller
         $res = $this->service->login($data);
         return $res;
     }
+
+    public function getUser($id){
+        $res = $this->service->getUser($id);
+        return $res;
+    }
 }
