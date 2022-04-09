@@ -4,6 +4,7 @@ namespace App\Modules\Stories\Services;
 
 use App\Modules\Core\Services\Service;
 use App\Modules\Stories\Models\Story;
+use App\Modules\Stories\Models\StoryImages;
 use App\Modules\Users\Models\UserInteracts;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
@@ -26,12 +27,12 @@ class StoryService extends Service{
         $posts = $this->model->get();
         $newposts = [];
         foreach($posts as $post){
-            $newposts[] = $this->convertToRightFormat($post);
+            $newposts[] = $this->convertToRightFormat($post, StoryImages::where("story_id",$post->id)->first());
         }
         return $newposts;
     }
 
-    public function add($uid, $story){
+    public function add($uid, $story, $images){
         $validator = Validator::make($story,$this->rules);
         if($validator->fails()){
             return Response::json(['Error'=>'Bad Request'],400);
@@ -44,7 +45,16 @@ class StoryService extends Service{
         $newstory->score = 0;
         $newstory->user_id = $uid;
         $newstory->save();
-        return $this->convertToRightFormat(($newstory));
+        $storyimages = new StoryImages;
+        $storyimages->story_id = $newstory->id;
+        for($i = 0; $i < count($images); $i++){
+            $imgpath = $images[$i]->store('userimages');
+            if($i == 0) $storyimages->image1 = $imgpath;
+            if($i == 1) $storyimages->image2 = $imgpath;
+            if($i == 2) $storyimages->image3 = $imgpath;
+        }
+        $storyimages->save();
+        return $this->convertToRightFormat($newstory, $storyimages);
     }
 
     public function update($uid, $storyid, $story){
@@ -62,7 +72,7 @@ class StoryService extends Service{
         $storytoupdate->title = $story['title'];
         $storytoupdate->content = $story['content'];
         $storytoupdate->save();
-        return $this->convertToRightFormat($storytoupdate);
+        return $this->convertToRightFormat($storytoupdate, []);
     }
 
     public function delete($storyid, $uid){
@@ -73,7 +83,10 @@ class StoryService extends Service{
         if($storytodelete['user_id'] != $uid){
             return Response::json(['Error'=>'You are not the owner of this post'],401);
         }
-        return $storytodelete->delete();
+        $imagestodelete = StoryImages::where("story_id",$storyid)->first();
+        $imagestodelete->delete();
+        $storytodelete->delete();
+        return Response::json(['message'=>'deleted post!']);
     }
 
     public function interact($storyid, $uid, $interaction){
@@ -115,7 +128,7 @@ class StoryService extends Service{
         }
     }
 
-    public function convertToRightFormat($story){
+    public function convertToRightFormat($story, $storyimages){
         $s = new stdClass;
         $s->storyid = $story['id'];
         $s->title = $story['title'];
@@ -125,6 +138,9 @@ class StoryService extends Service{
         $s->userid = $story['user_id'];
         $s->score = $story['score'];
         $s->date = $story['created_at'];
+        $s->image1 = '/' . $storyimages->image1;
+        $s->image2 = '/' . $storyimages->image2;
+        $s->image3 = '/' . $storyimages->image3;
         return $s;
     }
 }

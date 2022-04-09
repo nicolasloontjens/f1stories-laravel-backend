@@ -25,7 +25,7 @@ class StoryApiController extends Controller
             return Response::json(['Error'=>'No token found'],401);
         }
         $uid = JWT::decode($request->header('Authorization'),'verysecuresecret');
-        return $this->service->add($uid->uid,$request->only(['title','content','country','raceid']));
+        return $this->service->add($uid->uid,$request->only(['title','content','country','raceid']), $request->file('files'));
     }
 
     public function update($id, Request $request){

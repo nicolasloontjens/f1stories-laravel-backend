@@ -6,6 +6,7 @@ use App\Modules\Core\Services\Service;
 use App\Models\User;
 use App\Modules\Races\Models\Race;
 use App\Modules\Stories\Models\Story;
+use App\Modules\Stories\Models\StoryImages;
 use App\Modules\Users\Models\UserRaces;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -72,7 +73,7 @@ class UserService extends Service{
         $score = $stories->sum("score");
         $formattedstories = [];
         foreach($stories as $story){
-            $formattedstories[] = $this->convertToRightFormat($story);
+            $formattedstories[] = $this->convertToRightFormat($story, StoryImages::where("story_id",$story->id)->first());
         }
         $user->stories = $formattedstories;
         $user->racesvisited = $totalraces->count();
@@ -103,7 +104,7 @@ class UserService extends Service{
         return JWT::encode($jwtuser,'verysecuresecret');
     }
 
-    private function convertToRightFormat($story){
+    private function convertToRightFormat($story, $storyimages){
         $s = new stdClass;
         $s->storyid = $story['id'];
         $s->title = $story['title'];
@@ -113,6 +114,9 @@ class UserService extends Service{
         $s->userid = $story['user_id'];
         $s->score = $story['score'];
         $s->date = $story['created_at'];
+        $s->image1 = '/' . $storyimages->image1;
+        $s->image2 = '/' . $storyimages->image2;
+        $s->image3 = '/' . $storyimages->image3;
         return $s;
     }
 
