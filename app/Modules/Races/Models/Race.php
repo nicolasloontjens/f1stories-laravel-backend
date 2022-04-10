@@ -18,4 +18,8 @@ class Race extends Model
     public function userraces(){
         return $this->hasMany(UserRaces::class);
     }
+
+    public function translations(){
+        return $this->hasMany(RaceLanguage::class);
+    }
 }

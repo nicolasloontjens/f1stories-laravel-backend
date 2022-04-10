@@ -19,6 +19,14 @@ return new class extends Migration
             $table->date("date");
             $table->timestamps();
         });
+
+        Schema::create('races_language',function(Blueprint $table){
+            $table->id();
+            $table->integer('race_id');
+            $table->string('language');
+            $table->string('title');
+            $table->date('date');
+        });
     }
 
     /**
@@ -28,6 +36,7 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('races_language');
         Schema::dropIfExists('races');
     }
 };
