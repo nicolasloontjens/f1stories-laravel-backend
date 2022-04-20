@@ -2,6 +2,7 @@
 
 namespace App\Modules\Stories\Services;
 
+use App\Models\User;
 use App\Modules\Core\Services\Service;
 use App\Modules\Stories\Models\Story;
 use App\Modules\Stories\Models\StoryImages;
@@ -46,14 +47,16 @@ class StoryService extends Service{
         $newstory->user_id = $uid;
         $newstory->save();
         $storyimages = new StoryImages;
-        $storyimages->story_id = $newstory->id;
-        for($i = 0; $i < count($images); $i++){
-            $imgpath = $images[$i]->store('userimages');
-            if($i == 0) $storyimages->image1 = $imgpath;
-            if($i == 1) $storyimages->image2 = $imgpath;
-            if($i == 2) $storyimages->image3 = $imgpath;
+        if($images != null){
+            $storyimages->story_id = $newstory->id;
+            for($i = 0; $i < count($images); $i++){
+                $imgpath = $images[$i]->store('userimages');
+                if($i == 0) $storyimages->image1 = $imgpath;
+                if($i == 1) $storyimages->image2 = $imgpath;
+                if($i == 2) $storyimages->image3 = $imgpath;
+                $storyimages->save();
+            }
         }
-        $storyimages->save();
         return $this->convertToRightFormat($newstory, $storyimages);
     }
 
@@ -141,6 +144,7 @@ class StoryService extends Service{
         $s->image1 = '/' . $storyimages->image1;
         $s->image2 = '/' . $storyimages->image2;
         $s->image3 = '/' . $storyimages->image3;
+        $s->username = User::find($story['user_id'])->username;
         return $s;
     }
 }

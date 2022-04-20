@@ -73,7 +73,9 @@ class UserService extends Service{
         $score = $stories->sum("score");
         $formattedstories = [];
         foreach($stories as $story){
-            $formattedstories[] = $this->convertToRightFormat($story, StoryImages::where("story_id",$story->id)->first());
+            $storyimages = null;
+            $storyimages = StoryImages::where("story_id",$story->id)->first();
+            $formattedstories[] = $this->convertToRightFormat($story, $storyimages);
         }
         $user->stories = $formattedstories;
         $user->racesvisited = $totalraces->count();
@@ -114,9 +116,11 @@ class UserService extends Service{
         $s->userid = $story['user_id'];
         $s->score = $story['score'];
         $s->date = $story['created_at'];
-        $s->image1 = '/' . $storyimages->image1;
-        $s->image2 = '/' . $storyimages->image2;
-        $s->image3 = '/' . $storyimages->image3;
+        if($storyimages != null){
+            $s->image1 = '/' . $storyimages->image1;
+            $s->image2 = '/' . $storyimages->image2;
+            $s->image3 = '/' . $storyimages->image3;
+        }
         return $s;
     }
 
