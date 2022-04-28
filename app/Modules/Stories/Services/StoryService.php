@@ -14,7 +14,6 @@ use stdClass;
 class StoryService extends Service{
 
     protected $rules = [
-        "title" => "required|string",
         "content" => "required|string",
         "country" => "required|string",
         "raceid" => "required|integer"
@@ -39,7 +38,6 @@ class StoryService extends Service{
             return Response::json(['Error'=>'Bad Request'],400);
         }
         $newstory = new Story;
-        $newstory->title = $story['title'];
         $newstory->content = $story['content'];
         $newstory->country = $story['country'];
         $newstory->race_id = $story['raceid'];
@@ -61,7 +59,7 @@ class StoryService extends Service{
     }
 
     public function update($uid, $storyid, $story){
-        $validator = Validator::make($story,["title" => "required|string", "content" => "required|string"]);
+        $validator = Validator::make($story,["content" => "required|string"]);
         if($validator->fails()){
             return Response::json(['Error'=>'Bad Request'],400);
         }
@@ -72,7 +70,6 @@ class StoryService extends Service{
         if($storytoupdate['user_id'] != $uid){
             return Response::json(['Error'=>'You are not the owner of this post'],401);
         }
-        $storytoupdate->title = $story['title'];
         $storytoupdate->content = $story['content'];
         $storytoupdate->save();
         return $this->convertToRightFormat($storytoupdate, []);
@@ -134,16 +131,17 @@ class StoryService extends Service{
     public function convertToRightFormat($story, $storyimages){
         $s = new stdClass;
         $s->storyid = $story['id'];
-        $s->title = $story['title'];
         $s->content = $story['content'];
         $s->country = $story['country'];
         $s->raceid = $story['race_id'];
         $s->userid = $story['user_id'];
         $s->score = $story['score'];
         $s->date = $story['created_at'];
-        $s->image1 = '/' . $storyimages->image1;
-        $s->image2 = '/' . $storyimages->image2;
-        $s->image3 = '/' . $storyimages->image3;
+        if($storyimages != null){
+            $s->image1 = '/' . $storyimages->image1;
+            $s->image2 = '/' . $storyimages->image2;
+            $s->image3 = '/' . $storyimages->image3;
+        }
         $s->username = User::find($story['user_id'])->username;
         return $s;
     }

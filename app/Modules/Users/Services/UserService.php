@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Modules\Races\Models\Race;
 use App\Modules\Stories\Models\Story;
 use App\Modules\Stories\Models\StoryImages;
+use App\Modules\Users\Models\UserInteracts;
 use App\Modules\Users\Models\UserRaces;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -96,6 +97,10 @@ class UserService extends Service{
         $userrace->race_id = $race->id;
         $userrace->save();
         return Response::json(['message'=>'added race'],202);
+    }
+
+    public function getLikes($id){
+        return UserInteracts::select('story_id AS storyid','interaction')->where('user_id',$id)->get();
     }
 
     private function generateToken($user){

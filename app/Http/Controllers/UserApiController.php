@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Modules\Users\Models\UserInteracts;
 use App\Modules\Users\Services\JWT;
 use Illuminate\Http\Request;
 use App\Modules\Users\Services\UserService;
@@ -39,5 +40,9 @@ class UserApiController extends Controller
         $uid = JWT::decode($request->header('Authorization'),'verysecuresecret');
         $res = $this->service->addRace($id, $uid->uid, $request->all());
         return $res;
+    }
+
+    public function getLikes($id){
+        return Response::json($this->service->getLikes($id),200);
     }
 }

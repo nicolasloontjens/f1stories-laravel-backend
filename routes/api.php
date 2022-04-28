@@ -28,6 +28,7 @@ Route::post("/users/register",[UserApiController::class,"register"]);
 Route::post("/users/login",[UserApiController::class,'login']);
 Route::get("/users/{id}",[UserApiController::class,"getUser"]);
 Route::post("/users/{id}/race",[UserApiController::class,"addRace"]);
+Route::get('/users/{id}/likes',[UserApiController::class,'getLikes']);
 
 Route::get("/stories",[StoryApiController::class,"all"]);
 Route::post("/stories",[StoryApiController::class,"add"]);
