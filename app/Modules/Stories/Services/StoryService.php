@@ -97,7 +97,6 @@ class StoryService extends Service{
         }
         $story = $this->model::find($storyid);
         if($story == null) return Response::json(['Error'=>'Post does not exist'],400);
-        if($story['user_id'] != $uid) return Response::json(['Error'=>'You are not the owner of this post'],401);
         $previnteract = UserInteracts::where('user_id',$uid)->where('story_id',$storyid)->first();
         if($previnteract === null){
             if($value == 0){
