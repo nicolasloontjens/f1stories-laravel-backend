@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "11f7c5d2ded8fd1ccdb2d1cdd16ed186",
+    "content-hash": "339b996911f1d8ae9eaab96b3d5ea1f4",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -206,6 +206,69 @@
                 }
             ],
             "time": "2021-08-15T20:50:18+00:00"
+        },
+        {
+            "name": "dcblogdev/laravel-dropbox",
+            "version": "v3.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dcblogdev/laravel-dropbox.git",
+                "reference": "2756e5dca98f93f417cb5ba3a64bd96915c40867"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dcblogdev/laravel-dropbox/zipball/2756e5dca98f93f417cb5ba3a64bd96915c40867",
+                "reference": "2756e5dca98f93f417cb5ba3a64bd96915c40867",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6|^7",
+                "illuminate/support": "^5.5|^5.6|^5.7|^5.8|^6.0|^7.0|^8.0|^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Dcblogdev\\Dropbox\\DropboxServiceProvider"
+                    ],
+                    "aliases": {
+                        "Dropbox": "Dcblogdev\\Dropbox\\Facades\\Dropbox"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Dcblogdev\\Dropbox\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "David Carr",
+                    "email": "dave@dcblog.dev",
+                    "homepage": "https://dcblog.dev"
+                }
+            ],
+            "description": "A Laravel Dropbox v2 package",
+            "homepage": "https://github.com/dcblogdev/laravel-dropbox",
+            "keywords": [
+                "dropbox",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/dcblogdev/laravel-dropbox/issues",
+                "source": "https://github.com/dcblogdev/laravel-dropbox/tree/v3.0.4"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/dcblogdev",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-01-29T12:51:59+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -3177,147 +3240,6 @@
                 }
             ],
             "time": "2021-09-25T23:10:38+00:00"
-        },
-        {
-            "name": "spatie/dropbox-api",
-            "version": "1.20.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/spatie/dropbox-api.git",
-                "reference": "f7563632fa6e4970b895805169688be273fcbf19"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/spatie/dropbox-api/zipball/f7563632fa6e4970b895805169688be273fcbf19",
-                "reference": "f7563632fa6e4970b895805169688be273fcbf19",
-                "shasum": ""
-            },
-            "require": {
-                "graham-campbell/guzzle-factory": "^3.0|^4.0|^5.0",
-                "guzzlehttp/guzzle": "^6.2|^7.0",
-                "php": "^7.1|^8.0"
-            },
-            "conflict": {
-                "guzzlehttp/psr7": "<1.7.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^9.4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Spatie\\Dropbox\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Alex Vanderbist",
-                    "email": "alex.vanderbist@gmail.com",
-                    "homepage": "https://spatie.be",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Freek Van der Herten",
-                    "email": "freek@spatie.be",
-                    "homepage": "https://spatie.be",
-                    "role": "Developer"
-                }
-            ],
-            "description": "A minimal implementation of Dropbox API v2",
-            "homepage": "https://github.com/spatie/dropbox-api",
-            "keywords": [
-                "Dropbox-API",
-                "api",
-                "dropbox",
-                "spatie",
-                "v2"
-            ],
-            "support": {
-                "issues": "https://github.com/spatie/dropbox-api/issues",
-                "source": "https://github.com/spatie/dropbox-api/tree/1.20.1"
-            },
-            "funding": [
-                {
-                    "url": "https://spatie.be/open-source/support-us",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/spatie",
-                    "type": "github"
-                }
-            ],
-            "time": "2022-03-29T06:41:44+00:00"
-        },
-        {
-            "name": "spatie/flysystem-dropbox",
-            "version": "2.0.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/spatie/flysystem-dropbox.git",
-                "reference": "60ac0f929da31aa1321b4b2ac2ca0ba961e4664a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/spatie/flysystem-dropbox/zipball/60ac0f929da31aa1321b4b2ac2ca0ba961e4664a",
-                "reference": "60ac0f929da31aa1321b4b2ac2ca0ba961e4664a",
-                "shasum": ""
-            },
-            "require": {
-                "league/flysystem": "^2.0.4 || ^3.0.0",
-                "php": "^8.0",
-                "spatie/dropbox-api": "^1.17.1"
-            },
-            "require-dev": {
-                "phpspec/prophecy-phpunit": "^2.0.1",
-                "phpunit/phpunit": "^9.5.4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Spatie\\FlysystemDropbox\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Alex Vanderbist",
-                    "email": "alex.vanderbist@gmail.com",
-                    "homepage": "https://spatie.be",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Flysystem Adapter for the Dropbox v2 API",
-            "homepage": "https://github.com/spatie/flysystem-dropbox",
-            "keywords": [
-                "Flysystem",
-                "api",
-                "dropbox",
-                "flysystem-dropbox",
-                "spatie",
-                "v2"
-            ],
-            "support": {
-                "issues": "https://github.com/spatie/flysystem-dropbox/issues",
-                "source": "https://github.com/spatie/flysystem-dropbox/tree/2.0.6"
-            },
-            "funding": [
-                {
-                    "url": "https://spatie.be/open-source/support-us",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/spatie",
-                    "type": "github"
-                }
-            ],
-            "time": "2022-02-09T16:01:40+00:00"
         },
         {
             "name": "symfony/console",
