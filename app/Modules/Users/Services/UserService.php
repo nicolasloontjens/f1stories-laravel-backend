@@ -12,7 +12,7 @@ use App\Modules\Users\Models\UserRaces;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
-use App\Modules\Users\Services\JWT;
+use App\Models\Jwt;
 use Illuminate\Support\Facades\Hash;
 use stdClass;
 
@@ -88,7 +88,7 @@ class UserService extends Service{
         $user = $this->model::find($id);
         if($user == null) return Response::json(['Error'=>'User does not exist'],400);
         if($user['id'] != $uid) return Response::json(['Error'=>'You are not this user'],401);
-        $race = Race::where("title",$body['race'])->first();
+        $race = Race::where("title",$body)->first();
         if($race === null){
             return Response::json(['Error'=>'Race does not exist'],401);
         }

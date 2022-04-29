@@ -10,12 +10,12 @@
  *
  * https://github.com/luciferous/jwt/blob/master/JWT.php
  */
-namespace App\Modules\Users\Services;
+namespace App\Models;
 
 use DomainException;
 use UnexpectedValueException;
 
-class JWT
+class Jwt
 {
     /**
      * @param string      $jwt    The JWT

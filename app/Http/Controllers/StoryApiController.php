@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Modules\Stories\Services\StoryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
-use App\Modules\Users\Services\JWT;
+use App\Models\Jwt;
 use stdClass;
 
 class StoryApiController extends Controller

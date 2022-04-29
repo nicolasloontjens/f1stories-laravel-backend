@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Modules\Comments\Services\CommentService;
-use App\Modules\Users\Services\JWT;
+use App\Models\Jwt;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 

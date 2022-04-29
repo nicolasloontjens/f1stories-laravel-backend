@@ -23,13 +23,9 @@ class RaceService extends Service{
             return Response::json(['error'=>'Language not supported'],400);
         }
         if($language == 'en'){
-            return $this->model->all();
+            return $this->model->get(['id as raceid','title','date']);
         }
-        $races = $this->languageModel::where('language',$language)->get();
-        foreach($races as $race){
-            $race->id = $race->race_id;
-            unset($race->race_id);
-        }
+        $races = $this->languageModel::where('language',$language)->get(['id as raceid','title','date']);
         return $races;
     }
 }
