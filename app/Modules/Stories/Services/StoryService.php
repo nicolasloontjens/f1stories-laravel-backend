@@ -8,6 +8,7 @@ use App\Modules\Stories\Models\Story;
 use App\Modules\Stories\Models\StoryImages;
 use App\Modules\Users\Models\UserInteracts;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use stdClass;
 
@@ -32,7 +33,7 @@ class StoryService extends Service{
         return $newposts;
     }
 
-    public function add($uid, $story, $images){
+    public function add($uid, $story, $file0 = null, $file1 = null, $file2 = null){
         $validator = Validator::make($story,$this->rules);
         if($validator->fails()){
             return Response::json(['Error'=>'Bad Request'],400);
@@ -45,16 +46,20 @@ class StoryService extends Service{
         $newstory->user_id = $uid;
         $newstory->save();
         $storyimages = new StoryImages;
-        if($images != null){
-            $storyimages->story_id = $newstory->id;
-            for($i = 0; $i < count($images); $i++){
-                $imgpath = $images[$i]->store('userimages');
-                if($i == 0) $storyimages->image1 = $imgpath;
-                if($i == 1) $storyimages->image2 = $imgpath;
-                if($i == 2) $storyimages->image3 = $imgpath;
-                $storyimages->save();
-            }
+        $storyimages->story_id = $newstory->id;
+        if($file0 != null){
+            $imgpath = Storage::disk('s3')->put('images',$file0);
+            $storyimages->image1 = $imgpath;
         }
+        if($file1 != null){
+            $imgpath = Storage::disk('s3')->put('images',$file1);
+            $storyimages->image2 = $imgpath;
+        }
+        if($file2 != null){
+            $imgpath = Storage::disk('s3')->put('images',$file2);
+            $storyimages->image3 = $imgpath;
+        }
+        $storyimages->save();
         return $this->convertToRightFormat($newstory, $storyimages);
     }
 
@@ -137,9 +142,15 @@ class StoryService extends Service{
         $s->score = $story['score'];
         $s->date = $story['created_at'];
         if($storyimages != null){
-            $s->image1 = '/' . $storyimages->image1;
-            $s->image2 = '/' . $storyimages->image2;
-            $s->image3 = '/' . $storyimages->image3;
+            if($storyimages->image1!=null){
+                $s->image1 = Storage::disk('s3')->url($storyimages->image1);
+            }
+            if($storyimages->image2!=null){
+                $s->image2 = Storage::disk('s3')->url($storyimages->image2);
+            }
+            if($storyimages->image3!=null){
+                $s->image3 = Storage::disk('s3')->url($storyimages->image3);
+            }
         }
         $s->username = User::find($story['user_id'])->username;
         return $s;

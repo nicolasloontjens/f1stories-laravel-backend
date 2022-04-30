@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Jwt;
 use Illuminate\Support\Facades\Hash;
 use stdClass;
+use Storage;
 
 class UserService extends Service{
 
@@ -122,9 +123,15 @@ class UserService extends Service{
         $s->score = $story['score'];
         $s->date = $story['created_at'];
         if($storyimages != null){
-            $s->image1 = '/' . $storyimages->image1;
-            $s->image2 = '/' . $storyimages->image2;
-            $s->image3 = '/' . $storyimages->image3;
+            if($storyimages->image1!=null){
+                $s->image1 = Storage::disk('s3')->url($storyimages->image1);
+            }
+            if($storyimages->image2!=null){
+                $s->image2 = Storage::disk('s3')->url($storyimages->image2);
+            }
+            if($storyimages->image3!=null){
+                $s->image3 = Storage::disk('s3')->url($storyimages->image3);
+            }
         }
         return $s;
     }
