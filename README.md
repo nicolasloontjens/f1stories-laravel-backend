@@ -1,64 +1,96 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# F1 Stories: Laravel
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Laravel backend for my F1 Stories app.
 
-## About Laravel
+This version is running online, <a href="http://f1stories.herokuapp.com/api/">this</a> is the endpoint. 
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+The version running online is using an AWS S3 Bucket to store the images that users can upload.  
+The non-S3 version is on a separate branch in this project called non-s3.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Details
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- The multilingual route is /races 
+- You can query English(default), Dutch and French
+- Example: /stories?lang=en or nl or fr
 
-## Learning Laravel
+## Run locally:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- Copy the .env.example file, name it .env and fill in the necessary fields for the database
+- Run artisan migrate and then artisan db:seed to create the necessary tables for the api.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Endpoints:
 
-## Laravel Sponsors
+NOTE: all endpoints with POST, PUT and DELETE require a JWT token in the
+Authorization header of the request, this token is given when registering as a user, and updated when logging in as a user
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+- POST /users/register
+- POST /users/login  
+=> body required for these:
+```
+{
+    "username":"your username",
+    "password":"your password"
+}
+```
 
-### Premium Partners
+- GET /stories
+- GET /stories/{storyid}/comments
+- GET /users/{uid}
+- GET /races
+- GET /users/{uid}/likes  
+=> get endpoints for basic information the app needs
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+- POST /stories  
+Body => 
+```
+{
+    "title":"a title",
+    "content":"your story",
+    "country":"Belgium",
+    "raceid":1,
+    "image1": file,
+    "image2": file, 
+    "image3": file
+}
+```
+In the app the body is a form data object so the files can be sent to the api, these 3 "images" are optional.
 
-## Contributing
+- PUT /stories/{storyid}  
+Body => 
+```
+{
+    "content":"your updated post"
+}
+```
+- DELETE /stories/{storyid}  
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-## Code of Conduct
+- POST /stories/{storyid}/comments  
+Body =>
+- PUT /comments/{commentid}  
+Body =>
+```
+{
+    "content":"your comment"
+}
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-## Security Vulnerabilities
+- DEL /comments/{commentid}
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
+- POST /stories/{storyid}/interact  
+Body => 
+```
+{
+    "interact":0 or 1
+}
+```
+like or un-like a post
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- POST /users/{uid}/race
+Body =>
+```
+    "race":"Bahrain GP"
+```
+accepted race values are the titles of races found in the /races endpoint
