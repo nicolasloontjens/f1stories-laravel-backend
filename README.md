@@ -3,8 +3,7 @@
 Laravel backend for my F1 Stories app.
 
 This version is running online, <a href="http://f1stories.herokuapp.com/api/">this</a> is the endpoint. 
-
-The version running online is using an AWS S3 Bucket to store the images that users can upload.  
+This is using an AWS S3 Bucket to store the images that users can upload.  
 
 ## Details
 
